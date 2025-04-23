@@ -1,0 +1,191 @@
+
+-- Query 1: Count distinct transactions
+-- Purpose: Find the number of unique transactions in the dataset.
+-- Explanation: Uses COUNT DISTINCT on TRANSACTION_ID.
+SELECT 
+    COUNT(DISTINCT TRANSACTION_ID) AS COUNT_DISTINCT_TRANSACTION_ID
+FROM 
+    SALES_FACT;
+
+
+
+-- Query 2: Count distinct customers
+-- Purpose: Determine how many unique customers made purchases.
+-- Explanation: Uses COUNT DISTINCT on CUST_ID.
+SELECT 
+    COUNT(DISTINCT CUST_ID) AS COUNT_DISTINCT_CUST_ID
+FROM 
+    SALES_FACT;
+
+
+
+-- Query 3: Average transaction amount by region
+-- Purpose: Show average transaction size in each region.
+-- Explanation: Uses GROUP BY on REGION_DESC with AVG on TRANSACTION_AMT.
+SELECT 
+    REGION_DESC,
+    AVG(TRANSACTION_AMT) AS AVG_TRANSACTION_AMT
+FROM 
+    SALES_FACT
+GROUP BY 
+    REGION_DESC;
+
+
+
+-- Query 4: Distinct transactions grouped by channel and store
+-- Purpose: Count how many unique transactions happened by store and channel.
+-- Explanation: Uses GROUP BY with two dimensions and COUNT DISTINCT.
+SELECT 
+    CHANNEL_DESC,
+    STORE_DESC,
+    COUNT(DISTINCT TRANSACTION_ID) AS COUNT_DISTINCT_TRANSACTION_ID
+FROM 
+    SALES_FACT
+GROUP BY 
+    CHANNEL_DESC,
+    STORE_DESC;
+
+
+
+-- Query 5: Top store-channel combo by transaction count
+-- Purpose: Identify the busiest store-channel combination by transaction volume.
+-- Explanation: Orders by transaction count descending and returns only 1.
+SELECT 
+    CHANNEL_DESC,
+    STORE_DESC,
+    COUNT(DISTINCT TRANSACTION_ID) AS COUNT_DISTINCT_TRANSACTION_ID
+FROM 
+    SALES_FACT
+GROUP BY 
+    CHANNEL_DESC,
+    STORE_DESC
+ORDER BY 
+    COUNT_DISTINCT_TRANSACTION_ID DESC
+LIMIT 1;
+
+
+
+-- Query 6: Total transaction amount by month, year, and region
+-- Purpose: Summarize sales performance over time and regions.
+-- Explanation: Uses GROUP BY on time and region fields with SUM on amount.
+SELECT 
+    MONTH,
+    YEAR,
+    REGION_DESC,
+    SUM(TRANSACTION_AMT) AS TOTAL_TRANSACTION_AMT
+FROM 
+    SALES_FACT
+GROUP BY 
+    MONTH,
+    YEAR,
+    REGION_DESC
+ORDER BY 
+    MONTH DESC,
+    YEAR DESC;
+
+
+
+-- Query 7: Top-selling product in Western region, Dec 1997
+-- Purpose: Find the highest grossing product in a specific time/place.
+-- Explanation: Applies filters, groups by product, orders by sales, limits to top.
+SELECT 
+    PRODUCT_DESC,
+    SUM(TRANSACTION_AMT) AS TOTAL_SALES,
+    MONTH,
+    YEAR,
+    REGION_DESC
+FROM 
+    SALES_FACT
+WHERE 
+    YEAR = 1997 AND MONTH = 12 AND REGION_DESC = 'WEST'
+GROUP BY 
+    PRODUCT_DESC,
+    REGION_DESC,
+    MONTH,
+    YEAR
+ORDER BY 
+    TOTAL_SALES DESC
+LIMIT 1;
+
+
+
+-- Query 8: Number of distinct transactions per customer
+-- Purpose: Measure how many times each customer made a unique purchase.
+-- Explanation: Uses GROUP BY on CUST_ID and COUNT DISTINCT on TRANSACTION_ID.
+SELECT 
+    CUST_ID,
+    COUNT(DISTINCT TRANSACTION_ID) AS DISTINCT_TRANSACTION_COUNT
+FROM 
+    SALES_FACT
+GROUP BY 
+    CUST_ID;
+
+
+
+-- Query 9: Average number of transactions per customer
+-- Purpose: Understand customer activity on average.
+-- Explanation: First groups by customer to count transactions, then averages that.
+SELECT 
+    AVG(TransactionCount) AS AVG_TRANSACTIONS_PER_CUSTOMER
+FROM (
+    SELECT 
+        CUST_ID,
+        COUNT(DISTINCT TRANSACTION_ID) AS TransactionCount
+    FROM 
+        SALES_FACT
+    GROUP BY 
+        CUST_ID
+) AS Sub;
+
+
+
+-- Query 10: Revenue breakdown for specific product IDs by store and channel
+-- Purpose: Analyze how selected products performed by store/channel.
+-- Explanation: Filters by product IDs and groups by channel and store.
+SELECT 
+    CHANNEL_DESC,
+    STORE_DESC,
+    SUM(TRANSACTION_AMT) AS TOTAL_SALES
+FROM 
+    SALES_FACT
+WHERE 
+    PRODUCT_ID IN (19, 26, 27)
+GROUP BY 
+    CHANNEL_DESC,
+    STORE_DESC;
+
+
+
+-- Query 11: Most popular product by transaction count in a year
+-- Purpose: Identify the top product by usage volume.
+-- Explanation: Groups by year and product, counts transactions, limits to 1.
+SELECT 
+    YEAR,
+    PRODUCT_DESC,
+    COUNT(DISTINCT TRANSACTION_ID) AS TRANSACTION_COUNT
+FROM 
+    SALES_FACT
+GROUP BY 
+    YEAR,
+    PRODUCT_DESC
+ORDER BY 
+    TRANSACTION_COUNT DESC
+LIMIT 1;
+
+
+
+-- Query 12: Top 10 customers in 1997 by total spending
+-- Purpose: Rank the highest-spending customers in a given year.
+-- Explanation: Filters by year, groups by customer, sums amounts, limits to top 10.
+SELECT 
+    CUST_ID,
+    SUM(TRANSACTION_AMT) AS TOTAL_SPENT
+FROM 
+    SALES_FACT
+WHERE 
+    YEAR = 1997
+GROUP BY 
+    CUST_ID
+ORDER BY 
+    TOTAL_SPENT DESC
+LIMIT 10;
