@@ -13,7 +13,7 @@ This project showcases insights derived from analyzing retail transaction data u
 - SQL: Filtering, aggregation, joins, ranking
 
 ## Files Included
-- `Retail_Transaction_Analytics_SAS_SQL_Presentation.pptx`: Slide deck summarizing findings and business insights
+- Slide deck summarizing findings and business insights: https://github.com/huiherman/sas-retail-transaction-analytics/raw/main/Retail_Transaction_Analytics_SAS_SQL_Presentation.pptx
 - `README.md`: Overview of the project
 
 ## Business Insights
@@ -48,8 +48,3 @@ LIMIT 10;
 
 Created by Herman Hui  
 MBA in Business Analytics | Data-Driven Storyteller
-
-
-## Author
-Herman Hui  
-[GitHub](https://github.com/huiherman)  
