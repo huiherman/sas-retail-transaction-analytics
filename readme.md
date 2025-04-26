@@ -1,4 +1,4 @@
-# Retail Transaction Analytics (MBA Assignment)
+# Retail Transaction Analytics
 
 This project showcases insights derived from analyzing retail transaction data using SAS and SQL. Completed as part of the Business Analytics course at Carleton University, this assignment demonstrates practical skills in data manipulation, statistical analysis, and business intelligence.
 
